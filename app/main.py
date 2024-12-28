@@ -1,12 +1,19 @@
 from fastapi import FastAPI
-from app.api.routers import api_router
+#from dotenv import load_dotenv
+from api.routers import api_router
 
-def create_app() -> FastAPI:
-    app = FastAPI(
-        title="prediction-api",
-        description="API for prediction of price data",
-    )
-    app.include_router(api_router)
-    return app
+# Load environment variables from .env file
+#load_dotenv('.env')
 
-app = create_app()
+
+app = FastAPI(
+    title="prediction-api",
+    description="API for prediction of price data",
+)
+app.include_router(api_router)
+
+
+# TODO - remove this route
+@app.get("/")
+def read_root():
+    return {"message": "Hello from FastAPI!"}

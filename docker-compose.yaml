@@ -14,5 +14,19 @@ services:
       - timescale-data:/var/lib/postgresql/data
       - ./db_data:/docker-entrypoint-initdb.d
 
+  fastapi:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi
+    environment:
+      # Example environment variables
+      # Adjust or add additional ENV vars if needed
+      DATABASE_URL: postgres://admin:password@timescaledb:5432/timescale
+    ports:
+      - "8000:8000"
+    depends_on:
+      - timescaledb
+
 volumes:
   timescale-data:
