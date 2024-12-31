@@ -20,11 +20,20 @@ services:
       dockerfile: Dockerfile
     container_name: fastapi
     environment:
-      # Example environment variables
-      # Adjust or add additional ENV vars if needed
-      DATABASE_URL: postgres://admin:password@timescaledb:5432/timescale
+      - PYTHONUNBUFFERED=1
+      - DATABASE_URL=postgres://admin:password@timescaledb:5432/timescale
     ports:
       - "8000:8000"
+    env_file:
+      - .env
+    command: [
+        "uvicorn", 
+        "main:app", 
+        "--host", "0.0.0.0", 
+        "--port", "8080", 
+        "--reload"
+      ]
+
     depends_on:
       - timescaledb
 
