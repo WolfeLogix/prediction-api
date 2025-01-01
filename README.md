@@ -1,6 +1,7 @@
 # prediction-api
 
 ## TODO List
+
 - [ ] Data Structures
 - [ ] Container to load the data to the database
 - [ ] Queries to prepare the data into one table
