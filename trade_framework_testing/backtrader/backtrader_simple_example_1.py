@@ -1,10 +1,11 @@
 import backtrader as bt
-
 from datetime import datetime
 import argparse
 import sys
 
 # Define the SMA Strategy
+
+
 class SmaCross(bt.Strategy):
     params = (
         ('pfast', 10),  # period for the fast SMA
@@ -24,6 +25,8 @@ class SmaCross(bt.Strategy):
             self.sell()
 
 # Function to run backtest
+
+
 def run_backtest(data_path):
     cerebro = bt.Cerebro()
     cerebro.addstrategy(SmaCross)
@@ -55,48 +58,6 @@ def run_backtest(data_path):
     # Plot the result
     cerebro.plot()
 
-# Function to run live trading
-def run_live(api_key, api_secret, symbol, cash, timeframe):
-    cerebro = bt.Cerebro()
-    cerebro.addstrategy(SmaCross)
-
-    # Alpaca settings
-    ALPACA_API_KEY = api_key
-    ALPACA_API_SECRET = api_secret
-    ALPACA_PAPER = True  # Change to False for live trading
-
-    store = alpaca_backtrader_api.AlpacaStore(
-        key_id=ALPACA_API_KEY,
-        secret_key=ALPACA_API_SECRET,
-        paper=ALPACA_PAPER,
-        usePolygon=False
-    )
-
-    DataFactory = store.getdata
-    broker = store.getbroker()
-    cerebro.setbroker(broker)
-
-    data = DataFactory(
-        dataname=symbol,
-        timeframe=bt.TimeFrame.Minutes,
-        compression=timeframe,
-        historical=False
-    )
-    cerebro.adddata(data)
-
-    # Set initial cash
-    cerebro.broker.setcash(cash)
-
-    # Set commission
-    cerebro.broker.setcommission(commission=0.001)
-
-    print('Starting Portfolio Value: %.2f' % cerebro.broker.getvalue())
-
-    # Run live trading
-    cerebro.run()
-
-    print('Final Portfolio Value: %.2f' % cerebro.broker.getvalue())
-
 # Main function with CLI
 
 
@@ -109,25 +70,10 @@ def main():
     backtest_parser.add_argument(
         '--data', required=True, help='Path to historical data CSV file')
 
-    # Live command
-    live_parser = subparsers.add_parser('live', help='Run live trading')
-    live_parser.add_argument('--api_key', required=True, help='Alpaca API Key')
-    live_parser.add_argument(
-        '--api_secret', required=True, help='Alpaca API Secret')
-    live_parser.add_argument('--symbol', default='AAPL',
-                             help='Trading symbol, e.g., AAPL')
-    live_parser.add_argument('--cash', type=float,
-                             default=100000.0, help='Initial cash')
-    live_parser.add_argument('--timeframe', type=int,
-                             default=1, help='Timeframe in minutes')
-
     args = parser.parse_args()
 
     if args.command == 'backtest':
         run_backtest(args.data)
-    elif args.command == 'live':
-        run_live(args.api_key, args.api_secret,
-                 args.symbol, args.cash, args.timeframe)
     else:
         parser.print_help()
         sys.exit(1)
