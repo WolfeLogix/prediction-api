@@ -1,5 +1,10 @@
 # prediction-api
 
+## Archived
+
+After looking into trade execution frameworks, it has been found that there are better options than making an api. So this project is on hold indefinitly and will be pursing other options
+
+
 ## TODO List
 
 - [ ] Data Structures
